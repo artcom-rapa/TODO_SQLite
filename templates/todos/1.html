@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project details</title>
+    <style>
+        table, th, tr, td {border: 1px solid black;}
+
+    </style>
+</head>
+<body>
+<h2>{{ project.project_title }}</h2>
+
+<table>
+    <thead>
+    <th>Project Id</th>
+    <th>Project</th>
+    <th>Start date</th>
+    <th>End date</th>
+    <th>Status</th>
+    </thead>
+    {% for project in projects %}
+    <tr>
+        <td>{{ project.project_id }}</td>
+        <td>{{ project.project_title }}</a></td>
+        <td>{{ project.start_date_p }}</td>
+        <td>{{ project.end_date_p }}</td>
+        <td>{{ project.done }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<h2> Change a project : </h2>
+<form method="POST" action="/todos/{{ project_id }}/">
+    {{ form.hidden_tag() }}
+    <table>
+        {% for field in form if field.widget.input_type != 'hidden' %}
+        <tr>
+            <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
+            <td>{{ field }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="Go">
+</form>
+
+<table>
+    <thead>
+    <th>Task Id</th>
+    <th>Project Id</th>
+    <th>Task</th>
+    <th>Start date</th>
+    <th>End date</th>
+    </thead>
+    {% for task in tasks %}
+    <tr>
+        <td>{{ task.task_id }}</td>
+        <td>{{ task.project_id }}</td>
+        <td>{{ task.task_title }}</a></td>
+        <td>{{ task.start_date_p }}</td>
+        <td>{{ task.end_date_p }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2> Add a task : </h2>
+<form method="POST" action="/todos/{{ project_id }}/">
+    {{ form.hidden_tag() }}
+    <table>
+        {% for field in form if field.widget.input_type != 'hidden' %}
+        <tr>
+            <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
+            <td>{{ field }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="Go">
+</form>
+</body>
+</html>

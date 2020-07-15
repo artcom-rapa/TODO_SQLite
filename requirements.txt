@@ -1,0 +1,12 @@
+automium==0.2.6
+automium-web==0.1.1
+click==7.1.2
+Flask==1.1.2
+Flask-WTF==0.14.3
+itsdangerous==1.1.0
+Jinja2==2.11.2
+legacy==0.1.6
+MarkupSafe==1.1.1
+SQLite3Database==0.2.0
+Werkzeug==1.0.1
+WTForms==2.3.1
