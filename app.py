@@ -1,9 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for
 
-from forms import TodoFormProject
-from forms import TodoFormTask
-from models import projects
-from models import tasks
+from TODO_SQLite.forms import TodoFormProject, TodoFormTask
+from TODO_SQLite.models import projects, tasks
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nininini"
@@ -16,7 +14,7 @@ def projects_list():
 
     if request.method == "POST":
         if form.validate_on_submit():
-            projects.create_project(form.data)
+            projects.create_project((tuple(form.data.values())[:4]))
         return redirect(url_for("projects_list"))
 
     return render_template("todos.html", form=form, projects=projects.all_projects(), error=error)
@@ -24,12 +22,20 @@ def projects_list():
 
 @app.route("/todos/<int:project_id>/", methods=["GET", "POST"])
 def project_details(project_id):
-    project = projects.get(project_id - 1)
-    form = TodoFormProject(data=project)
+    project = projects.get_projects(project_id)
+
+    project_dict = {
+    "name": project[1] ,
+    "start_date": project[2],
+    "end_date": project[3],
+    "status": project[4]
+    }
+
+    form = TodoFormProject(data=project_dict)
 
     if request.method == "POST":
         if form.validate_on_submit():
-            projects.update(project_id - 1, form.data)
+            projects.update(project_id, tuple(form.data.values())[:4])
         return redirect(url_for("project_list"))
     return render_template("todo.html", form=form, project_id=project_id)
 
@@ -39,7 +45,7 @@ def tasks_list():
     error = ""
     if request.method == "POST":
         if form.validate_on_submit():
-            tasks.create_task(form.data)
+            tasks.create_task((tuple(form.data.values())[:5]))
         return redirect(url_for("tasks_list"))
 
     return render_template("todo.html", form=form, tasks=tasks.all_tasks(), error=error)
