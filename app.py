@@ -14,7 +14,7 @@ def projects_list():
 
     if request.method == "POST":
         if form.validate_on_submit():
-            projects.create_project((tuple(form.data.values())[:4]))
+            projects.create_project((tuple(form.data.values())[:5]))
         return redirect(url_for("projects_list"))
 
     return render_template("todos.html", form=form, projects=projects.all_projects(), error=error)
@@ -35,15 +35,15 @@ def project_details(project_id):
 
     if request.method == "POST":
         if form.validate_on_submit():
-            projects.update(project_id, tuple(form.data.values())[:4])
-        return redirect(url_for("project_list"))
-    return render_template("todo.html", form=form, project_id=project_id)
+            projects.update(project_id, tuple(form.data.values())[:5])
+        return redirect(url_for("projects_list"))
+    return render_template("todo.html", form=form, project=project, project_id=project_id)
 
 
 def tasks_list():
     form = TodoFormTask()
     error = ""
-    if request.method == "POST":
+    if request.method == "POST" and form == TodoFormTask():
         if form.validate_on_submit():
             tasks.create_task((tuple(form.data.values())[:5]))
         return redirect(url_for("tasks_list"))

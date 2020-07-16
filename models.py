@@ -12,7 +12,6 @@ class TodoProjects:
         try:
             self.conn = sqlite3.connect(db_file, check_same_thread=False)
             self.cur = self.conn.cursor()
-            self.projects = self.cur.execute(f"SELECT * FROM projects")
         except sqlite3.Error as e:
             print(e)
 
@@ -66,7 +65,6 @@ class TodoTasks:
 
     def all_tasks(self):
         self.cur.execute(f"SELECT * FROM tasks")
-
         return self.cur.fetchall()
 
     def create_task(self, data):
