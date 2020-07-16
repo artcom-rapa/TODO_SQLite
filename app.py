@@ -7,13 +7,13 @@ from models import tasks
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nininini"
-db_file = "database.db"
 
 
 @app.route("/todos/", methods=["GET", "POST"])
 def projects_list():
     form = TodoFormProject()
     error = ""
+
     if request.method == "POST":
         if form.validate_on_submit():
             projects.create_project(form.data)

@@ -10,10 +10,15 @@ class TodoProjects:
            """
         self.conn = None
         try:
-            self.conn = sqlite3.connect(db_file)
+            self.conn = sqlite3.connect(db_file, check_same_thread=False)
             self.cur = self.conn.cursor()
+            self.projects = self.cur.execute(f"SELECT * FROM projects")
         except sqlite3.Error as e:
             print(e)
+
+    def all_projects(self):
+        self.cur.execute(f"SELECT * FROM projects")
+        return self.cur.fetchall()
 
     def create_project(self, data):
         """
@@ -21,22 +26,27 @@ class TodoProjects:
         :param data:
         :return: project id
         """
-        sql = '''INSERT INTO projects(nazwa, start_date, end_date, status)
+        sql = '''INSERT INTO projects(name, start_date, end_date, status)
                  VALUES(?,?,?,?)'''
         self.cur.execute(sql, data)
         self.conn.commit()
         return self.cur.lastrowid
 
-    def all_projects(self):
-        self.cur.execute(f"SELECT * FROM projects")
-        rows = self.cur.fetchall()
-        return rows
-
     def get_projects(self, id):
 
-        self.cur.execute(f"SELECT * FROM projects WHERE id = ?", id)
-        rows = self.cur.fetchall()
-        return rows
+        self.cur.execute(f"SELECT * FROM projects WHERE id = {id}")
+        return self.cur.fetchone()
+
+    def update(self, id, data):
+        sql = f''' UPDATE projects
+                    SET name = ?, start_date = ?, end_date = ?, status = ?
+                    WHERE id = {id}'''
+        print(sql)
+        try:
+            self.cur.execute(sql, data)
+            self.conn.commit()
+        except sqlite3.OperationalError as e:
+            print(e)
 
 
 class TodoTasks:
@@ -48,11 +58,16 @@ class TodoTasks:
         """
         self.conn = None
         try:
-            self.conn = sqlite3.connect(db_file)
+            self.conn = sqlite3.connect(db_file, check_same_thread=False)
             self.cur = self.conn.cursor()
 
         except sqlite3.Error as e:
             print(e)
+
+    def all_tasks(self):
+        self.cur.execute(f"SELECT * FROM tasks")
+
+        return self.cur.fetchall()
 
     def create_task(self, data):
         """
@@ -61,22 +76,27 @@ class TodoTasks:
         :return: zadanie id
         """
 
-        sql = '''INSERT INTO tasks(projekt_id, nazwa, opis, start_date, end_date)
+        sql = '''INSERT INTO tasks(project_id, name, description, start_date, end_date)
                      VALUES(?,?,?,?,?)'''
         self.cur.execute(sql, data)
         self.conn.commit()
         return self.cur.lastrowid
 
-    def all_tasks(self):
-        self.cur.execute(f"SELECT * FROM tasks")
-
-        return self.cur.fetchall()
-
     def get_tasks(self, id):
 
-        self.cur.execute(f"SELECT * FROM tasks WHERE id = ?", id)
-        rows = self.cur.fetchall()
-        return rows
+        self.cur.execute(f"SELECT * FROM tasks WHERE id = {id} ")
+        return self.cur.fetchone()
+
+    def update(self, id, data):
+        sql = f''' UPDATE tasks
+                    SET project_id = ?, name = ?, description = ?, start_date = ?, end_date = ?
+                    WHERE id = {id}'''
+        print(sql)
+        try:
+            self.cur.execute(sql, data)
+            self.conn.commit()
+        except sqlite3.OperationalError as e:
+            print(e)
 
 
 db_file = "database.db"
