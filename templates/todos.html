@@ -9,7 +9,9 @@
 </head>
 <body>
     <h2>Project list</h2>
-
+{% if form.errors %}
+    failed validation
+{% endif %}
     <table>
         <thead>
         <th>#</th>

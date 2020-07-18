@@ -7,11 +7,14 @@
         table, th, tr, td {border: 1px solid black;}
 
 
-
     </style>
 </head>
 <body>
-<h2>{{ project[1] }}</h2>
+{% if form.errors %}
+failed validation
+{% endif %}
+
+<h2>Title of project: {{ project[1] }}</h2>
 
 <table>
     <thead>
@@ -23,25 +26,13 @@
     </thead>
     <tr>
         <td>{{ project[0] }}</td>
-        <td><a href="/todos/">{{ project[1] }}</td>
+        <td><a href="/todos/">{{ project[1] }}</a></td>
         <td>{{ project[2] }}</td>
         <td>{{ project[3] }}</td>
         <td>{{ project[4] }}</td>
     </tr>
 </table>
-<h2> Change a project : </h2>
-<form method="POST" action="/todos/{{ project_id }}/">
-    {{ form.hidden_tag() }}
-    <table>
-        {% for field in form if field.widget.input_type != 'hidden' %}
-        <tr>
-            <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
-            <td>{{ field }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <input type="submit" value="Go">
-</form>
+
 <h2>Task list of project: </h2>
 <table>
     <thead>
@@ -55,26 +46,42 @@
     {% for task in tasks %}
     <tr>
         <td>{{ task[0]}}</td>
-        <td><a href="/todos/{{ task[0] }}">{{ task[1] }}</td>
-        <td>{{ task[2]}}</td>
+        <td>{{ task[1] }} </td>
+        <td><a href="/todos/{{ project_id }}/{{ task_id }}/">{{ task[2]}}</a></td>
         <td>{{ task[3] }}</td>
         <td>{{ task[4] }}</td>
+        <td>{{ task[5] }}</td>
     </tr>
     {% endfor %}
 </table>
 
 <h2> Add a task : </h2>
-<form method="POST" action="/todos/{{ project_id }}/">
-    {{ form.hidden_tag() }}
-    <table>
-        {% for field in form if field.widget.input_type != 'hidden' %}
-        <tr>
-            <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
-            <td>{{ field }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    <input type="submit" value="Go">
-</form>
+<form method=" POST" action="/todos/{{ project_id }}/">
+            {{ form.hidden_tag() }}
+            <table>
+                {% for field in form if field.widget.input_type != 'hidden' %}
+                <tr>
+                    <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
+                    <td>{{ field }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <input type="submit" value="Go">
+            </form>
+
+            <h2> Change a project : </h2>
+            <form method="POST" action="/todos/{{ project_id }}/">
+                {{ form.hidden_tag() }}
+                <table>
+                    {% for field in form if field.widget.input_type != 'hidden' %}
+                    <tr>
+                        <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
+                        <td>{{ field }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <input type="submit" value="Change a project">
+            </form>
+
 </body>
 </html>
