@@ -9,9 +9,7 @@
 </head>
 <body>
     <h2>Project list</h2>
-{% if form.errors %}
-    failed validation
-{% endif %}
+
     <table>
         <thead>
         <th>#</th>
@@ -23,16 +21,16 @@
         {% for project in projects %}
         <tr>
             <td>{{ project[0] }}</td>
-            <td><a href="/todos/{{ project[0] }}">{{ project[1] }}</a></td>
+            <td><a href="/projects/{{ project[1] }}">{{ project[1] }}</a></td>
             <td>{{ project[2] }}</td>
             <td>{{ project[3] }}</td>
             <td>{{ project[4] }}</td>
         </tr>
         {% endfor %}
     </table>
-    <div>
-        <h2> Add a new project: </h2>
-        <form method="POST" action="/todos/">
+<div>
+        <h2> Change the project: </h2>
+        <form method="POST" action="/projects/">
             {{ form.hidden_tag() }}
             <table>
                 {% for field in form if field.widget.input_type != 'hidden' %}
@@ -45,5 +43,6 @@
             <input type="submit" value="Go">
         </form>
     </div>
+</body>
 </body>
 </html>

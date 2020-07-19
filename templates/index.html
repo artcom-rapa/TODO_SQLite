@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data</title>
+    <style>
+        table, th, tr, td {border: 1px solid black;}
+    </style>
+</head>
+<body>
+ <h2><a href="">Project list</a></h2>
+
+    <table>
+        <thead>
+        <th>#</th>
+        <th>Project</th>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Status</th>
+        </thead>
+        {% for project in projects %}
+        <tr>
+            <td>{{ project[0] }}</td>
+            <td><a href="/projects/{{ project[0] }}">{{ project[1] }}</a></td>
+            <td>{{ project[2] }}</td>
+            <td>{{ project[3] }}</td>
+            <td>{{ project[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+<h2> Add the project : </h2>
+<form method="POST" action="{{url_for('index')}}">
+
+    {{ form.csrf_token }}
+    <table>
+        <tr>
+            <th>{{ form.project_title.label }} * </th><td> {{ form.project_title }}</td>
+            <th>{{ form.start_date_p.label }} </th><td> {{ form.start_date_p }}</td>
+            <th>{{ form.end_date_p.label }} </th><td> {{ form.end_date_p }}</td>
+            <th>{{ form.done.label }} </th><td> {{ form.done }}</td>
+        </tr>
+    </table>
+    <input type="submit" value="Add the project">
+</form>
+
+<h2> Add the task : </h2>
+<form method="POST" action="{{url_for('index')}}">
+
+    {{ form1.csrf_token }}
+    <table>
+        <tr>
+            <th>{{ form1.project_id.label }} * </th><td> {{ form1.project_id }}</td>
+            <th>{{ form1.task_title.label }} * </th><td> {{ form1.task_title }}</td>
+            <th>{{ form1.description.label }} * </th><td> {{ form1.description }}</td>
+            <th>{{ form1.start_date_t.label }} </th><td> {{ form1.start_date_t }}</td>
+            <th>{{ form1.end_date_t.label }} </th><td> {{ form1.end_date_t }}</td>
+        </tr>
+    </table>
+    <input type="submit" value="Add the task">
+</form>
+</body>
+</html>

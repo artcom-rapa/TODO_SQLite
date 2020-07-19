@@ -54,17 +54,6 @@ class TodoProjects:
         except sqlite3.OperationalError as e:
             print(e)
 
-    def delete(self, id):
-        """
-        Delete from table where id
-        :param id
-        :return:
-        """
-        sql = f'DELETE FROM projects WHERE id = {id}'
-        self.cur.execute(sql, id)
-        self.conn.commit()
-        print("Deleted")
-
 
 class TodoTasks:
     def __init__(self, db_file):
@@ -103,10 +92,10 @@ class TodoTasks:
         self.cur.execute(f"SELECT * FROM tasks WHERE id = {id} ")
         return self.cur.fetchone()
 
-    def update(self, id, data):
+    def update(self,project_id, id, data):
         sql = f''' UPDATE tasks
                     SET project_id = ?, name = ?, description = ?, start_date = ?, end_date = ?
-                    WHERE id = {id}'''
+                    WHERE project_id = {project_id}, id = {id}, '''
         print(sql)
         try:
             self.cur.execute(sql, data)
