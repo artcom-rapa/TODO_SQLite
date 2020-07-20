@@ -3,9 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Project details</title>
-
+    <style>
+        table, th, tr, td {border: 1px solid black;}
+    </style>
 </head>
 <body>
+<h2><a href="/projects/">Project title: {{ project[1] }} </a></h2>
+    <table>
+        <thead>
+        <th>#</th>
+        <th>Project title</th>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Status</th>
+        </thead>
+        <tr>
+            <td>{{ project[0] }}</td>
+            <td><a href="/projects/">{{ project[1] }}</a></td>
+            <td>{{ project[2] }}</td>
+            <td>{{ project[3] }}</td>
+            <td>{{ project[4] }}</td>
+        </tr>
+    </table>
+
+<h2><a href="/tasks/">Task list</a></h2>
+    <table>
+        <thead>
+        <th>#</th>
+        <th>Project Id</th>
+        <th>Task title</th>
+        <th>Description</th>
+        <th>Start date</th>
+        <th>End date</th>
+        </thead>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task[0] }}</td>
+            <td>{{ task[1] }}</td>
+            <td><a href="/tasks/{{ task[0] }}/">{{ task[2] }}</a></td>
+            <td>{{ task[3] }}</td>
+            <td>{{ task[4] }}</td>
+            <td>{{ task[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
 <h2> Change the project: </h2>
     <form method="POST" action="{{url_for('index')}}">
         {{ form.hidden_tag() }}
@@ -19,5 +61,21 @@
         </table>
         <input type="submit" value="Change the project">
     </form>
+<h2> Add the task : </h2>
+<form method="POST" action="{{url_for('index')}}">
+
+    {{ form1.csrf_token }}
+    <table>
+        <tr>
+            <th>{{ form1.project_id.label }} * </th><td> {{ form1.project_id }}</td>
+            <th>{{ form1.task_title.label }} * </th><td> {{ form1.task_title }}</td>
+            <th>{{ form1.description.label }} * </th><td> {{ form1.description }}</td>
+            <th>{{ form1.start_date_t.label }} </th><td> {{ form1.start_date_t }}</td>
+            <th>{{ form1.end_date_t.label }} </th><td> {{ form1.end_date_t }}</td>
+        </tr>
+    </table>
+    <input type="submit" value="Add the task">
+</form>
+<h2><a href="{{url_for('index')}}">Home</a></h2>
 </body>
 </html>

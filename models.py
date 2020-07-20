@@ -92,10 +92,10 @@ class TodoTasks:
         self.cur.execute(f"SELECT * FROM tasks WHERE id = {id} ")
         return self.cur.fetchone()
 
-    def update(self,project_id, id, data):
+    def update(self, id, data):
         sql = f''' UPDATE tasks
                     SET project_id = ?, name = ?, description = ?, start_date = ?, end_date = ?
-                    WHERE project_id = {project_id}, id = {id}, '''
+                    WHERE id = {id}, '''
         print(sql)
         try:
             self.cur.execute(sql, data)

@@ -8,7 +8,7 @@
     </style>
 </head>
 <body>
-    <h2>Project list</h2>
+    <h2><a href="{{url_for('index')}}">Home</a></h2>
 
     <table>
         <thead>
@@ -21,28 +21,14 @@
         {% for project in projects %}
         <tr>
             <td>{{ project[0] }}</td>
-            <td><a href="/projects/{{ project[1] }}">{{ project[1] }}</a></td>
+            <td><a href="/projects/{{ project[0] }}">{{ project[1] }}</a></td>
             <td>{{ project[2] }}</td>
             <td>{{ project[3] }}</td>
-            <td>{{ project[4] }}</td>
-        </tr>
+            <td>{{ project[4] }}</td>        </tr>
         {% endfor %}
     </table>
 <div>
-        <h2> Change the project: </h2>
-        <form method="POST" action="/projects/">
-            {{ form.hidden_tag() }}
-            <table>
-                {% for field in form if field.widget.input_type != 'hidden' %}
-                <tr>
-                    <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
-                    <td>{{ field }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-            <input type="submit" value="Go">
-        </form>
+
     </div>
-</body>
 </body>
 </html>

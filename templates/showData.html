@@ -9,7 +9,7 @@
 </head>
 <body>
     {% if form %}
-    <h2> Added Project:  </h2>
+    <h2> Project title: {{ form.project_title.data }} </h2>
 <table>
     <thead>
     <th>Project</th>
@@ -18,13 +18,13 @@
     <th>Status</th>
     </thead>
     <tr>
-        <td><a href="">{{ form.project_title.data }}</a></td>
+        <td><a href="/projects/{{ project_id }}">{{ form.project_title.data }}</a></td>
         <td>{{ form.start_date_p.data }}</td>
         <td>{{ form.end_date_p.data }}</td>
         <td>{{ form.done.data }}</td>
      </tr>
 </table>
-    <h2><a href="/projects/">Back to the list </a></h2>
+    <h2><a href="">Back to the list </a></h2>
     {% endif %}
 
     {% if form1 %}
@@ -39,14 +39,14 @@
     <th>End date</th>
     </thead>
         <tr>
-        <td><a href="">{{ form1.project_id.data }}</a></td>
+        <td><a href="/projekts/{{ project_id }}/">{{ form1.project_id.data }}</a></td>
         <td><a href="">{{ form1.task_title.data }}</a></td>
         <td>{{ form1.description.data }}</td>
         <td>{{ form1.start_date_t.data }}</td>
         <td>{{ form1.end_date_t.data }}</td>
      </tr>
 </table>
-      <h2><a href="">Back to the list </a></h2>
+      <h2><a href="/tasks/">Back to the list </a></h2>
     {% endif %}
 </body>
 </html>
