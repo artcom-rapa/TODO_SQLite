@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
-
+from datetime import datetime
+from collections import namedtuple
 from TODO_SQLite.forms import TodoFormProject, TodoFormTask
 from TODO_SQLite.models import projects, tasks
 
@@ -31,19 +32,24 @@ def index():
 def task_details(task_id):
     task = tasks.get_tasks(task_id)
 
-    task_dict = {
-        "project_id": task[1],
-        "name": task[2],
-        "descriptions": task[3],
-        "start_date": task[4],
-        "end_date": task[5]
-    }
+    Task = namedtuple("Task", ["project_id", "task_title", "description", "start_date_t", "end_date_t"])
 
-    form1 = TodoFormTask(data=task_dict)
+    start_date = datetime.strptime(task[4], '%Y-%m-%d %H:%M:%S')
+    end_date = datetime.strptime(task[5], '%Y-%m-%d %H:%M:%S')
+
+    ta = Task(
+        project_id=task[1],
+        task_title=task[2],
+        description=task[3],
+        start_date_t=start_date,
+        end_date_t=end_date
+    )
+
+    form1 = TodoFormTask(obj=ta)
 
     if request.method == "POST":
         if form1.validate_on_submit():
-            form1 = TodoFormTask(data=task_dict)
+            form1 = TodoFormTask(obj=ta)
             print(tuple(form1.data.values())[:5])
             tasks.update(task_id, tuple(form1.data.values())[:5])
             return render_template('showData.html', form1=form1)
@@ -76,19 +82,24 @@ def project_details(project_id):
     project = projects.get_projects(project_id)
     tasks = projects.get_tasks(project_id)
 
-    project_dict = {
-        "name": project[1],
-        "start_date": project[2],
-        "end_date": project[3],
-        "done": project[4],
-    }
-    form = TodoFormProject(data=project_dict)
+    Project = namedtuple("Project", ["project_title", "start_date_p", "end_date_p", "done"])
+
+    start_date = datetime.strptime(project[2], '%Y-%m-%d %H:%M:%S')
+    end_date = datetime.strptime(project[3], '%Y-%m-%d %H:%M:%S')
+
+    pr = Project(
+        project_title=project[1],
+        start_date_p=start_date,
+        end_date_p=end_date,
+        done=project[4],
+    )
+
+    form = TodoFormProject(obj=pr)
     form1 = TodoFormTask()
 
     if request.method == "POST":
         if form.validate_on_submit():
-            form = TodoFormProject(data=project_dict)
-            print(tuple(form.data.values())[:4])
+            form = TodoFormProject(obj=pr)
             projects.update(project_id, tuple(form.data.values())[:4])
             return render_template('showData.html', form=form)
         if form1.validate_on_submit():
