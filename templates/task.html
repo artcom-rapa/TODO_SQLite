@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<h2><a href="/tasks/">Task title: {{ task[3] }}</a></h2>
+<h2>Task title: {{ task[2] }}</h2>
     <table>
         <thead>
         <th>#</th>
@@ -21,7 +21,7 @@
         </thead>
         <tr>
             <td>{{ task[0] }}</td>
-            <td><a href="/projects/{{ task[0] }}/">{{ task[1] }}</a></td>
+            <td>{{ task[1] }}</td>
             <td>{{ task[2] }}</td>
             <td>{{ task[3] }}</td>
             <td>{{ task[4] }}</td>
@@ -30,19 +30,20 @@
     </table>
 
 <h2> Change the task: </h2>
-    <form method="POST" action="{{url_for('index')}}">
-        {{ form.hidden_tag() }}
-        <table>
-            {% for field in form if field.widget.input_type != 'hidden' %}
-                <tr>
-                    <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
-                    <td>{{ field }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-        <input type="submit" value="Change the project">
-    </form>
+    <form method="POST" action="/task/{{ task_id }}/">
 
+    {{ form1.csrf_token }}
+    <table>
+        <tr>
+            <th>{{ form1.project_id.label }} * </th><td> {{ form1.project_id }}</td>
+            <th>{{ form1.task_title.label }} * </th><td> {{ form1.task_title }}</td>
+            <th>{{ form1.description.label }} * </th><td> {{ form1.description }}</td>
+            <th>{{ form1.start_date_t.label }} </th><td> {{ form1.start_date_t }}</td>
+            <th>{{ form1.end_date_t.label }} </th><td> {{ form1.end_date_t }}</td>
+        </tr>
+    </table>
+    <input type="submit" value="Change the task">
+</form>
 <h2><a href="{{url_for('index')}}">Home</a></h2>
 </body>
 </html>

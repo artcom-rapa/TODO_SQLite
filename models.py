@@ -95,8 +95,7 @@ class TodoTasks:
     def update(self, id, data):
         sql = f''' UPDATE tasks
                     SET project_id = ?, name = ?, description = ?, start_date = ?, end_date = ?
-                    WHERE id = {id}, '''
-        print(sql)
+                    WHERE id = {id} '''
         try:
             self.cur.execute(sql, data)
             self.conn.commit()

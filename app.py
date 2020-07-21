@@ -16,6 +16,7 @@ def index():
 
         if todoformproject.validate_on_submit():
             data = tuple(todoformproject.data.values())[:4]
+            print(data)
             projects.create_project(data)
             return render_template('showData.html', form=todoformproject)
         if todoformtask.validate_on_submit():
@@ -26,9 +27,10 @@ def index():
     return render_template('index.html', form1=todoformtask, form=todoformproject, projects=projects.all_projects())
 
 
-@app.route("/tasks/<int:task_id>/", methods=["GET", "POST"])
+@app.route("/task/<int:task_id>/", methods=["GET", "POST"])
 def task_details(task_id):
     task = tasks.get_tasks(task_id)
+
     task_dict = {
         "project_id": task[1],
         "name": task[2],
@@ -41,11 +43,11 @@ def task_details(task_id):
 
     if request.method == "POST":
         if form1.validate_on_submit():
+            form1 = TodoFormTask(data=task_dict)
             print(tuple(form1.data.values())[:5])
-            data = task_id, tuple(form1.data.values())[:5]
-            tasks.update(data)
+            tasks.update(task_id, tuple(form1.data.values())[:5])
             return render_template('showData.html', form1=form1)
-    return render_template("task.html", form=form1, task_id=task_id, task=task)
+    return render_template("task.html", form1=form1, task_id=task_id, task=task)
 
 
 @app.route("/tasks/", methods=["GET", "POST"])
@@ -54,7 +56,7 @@ def tasks_list():
 
     if request.method == "POST":
         data = tuple(todoformtask.data.values())
-        tasks.update(data)
+        tasks.creat_task(data)
         return render_template('showData.html', form1=todoformtask)
     return render_template("tasks.html", tasks=tasks.all_tasks(), form1=todoformtask)
 
@@ -69,11 +71,10 @@ def projects_list():
     return render_template("projects.html", projects=projects.all_projects(), form=todoformproject)
 
 
-@app.route("/projects/<int:project_id>/", methods=["GET", "POST"])
+@app.route("/project/<int:project_id>/", methods=["GET", "POST"])
 def project_details(project_id):
     project = projects.get_projects(project_id)
     tasks = projects.get_tasks(project_id)
-    print(tasks)
 
     project_dict = {
         "name": project[1],
@@ -81,22 +82,21 @@ def project_details(project_id):
         "end_date": project[3],
         "done": project[4],
     }
-
     form = TodoFormProject(data=project_dict)
     form1 = TodoFormTask()
 
     if request.method == "POST":
         if form.validate_on_submit():
-            print(tuple(form1.data.values())[:4])
-            data = project_id, tuple(form1.data.values())[:4]
-            project.update(data)
+            form = TodoFormProject(data=project_dict)
+            print(tuple(form.data.values())[:4])
+            projects.update(project_id, tuple(form.data.values())[:4])
             return render_template('showData.html', form=form)
         if form1.validate_on_submit():
             print(form1.data.values())
             data = tuple(form1.data.values())[:5]
             tasks.create_task(data)
             return render_template('showData.html', form1=form1)
-    return render_template("project.html", form=form, form1=form1, project=project, tasks=tasks, project_id=project_id)
+    return render_template("project.html", form=form, form1=form1, tasks=tasks, project=project, project_id=project_id)
 
 
 if __name__ == "__main__":
